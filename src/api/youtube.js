@@ -26,3 +26,18 @@ export const searchYoutube = async (options) => {
     console.error(err);
   }
 };
+
+export const getPopularYoutube = async (options) => {
+  const YOUTUBE_URL = `https://www.googleapis.com/youtube/v3/videos?key=${YOUTUBE_API_KEY}&part=snippet,player${mapObjectToQueryStrings(
+    options
+  )}`;
+
+  try {
+    const res = await fetch(YOUTUBE_URL);
+    const data = await res.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+};

@@ -5,13 +5,20 @@ import Input from "../shared/Input";
 // 조사해보시고 다른 컴포넌트에도 폭넓게 적용해보세요.
 import PropTypes from "prop-types";
 
-export default function SearchInput({ onChange, placeholder, value }) {
+export default function SearchInput({ onChange, placeholder, value, updateKeywordSubmitted }) {
+  function handleKeyPress (ev) {
+    if (ev.keyCode === 13) {
+      updateKeywordSubmitted(true);
+    }
+  }
+
   return (
     <Input
       type="text"
       placeholder={placeholder}
       value={value}
       onChange={(ev) => onChange(ev.target.value)}
+      onKeyUp={(ev) => handleKeyPress(ev)}
     />
   );
 }

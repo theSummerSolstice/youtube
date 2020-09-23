@@ -1,11 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
+import Modal from "../Modal";
 
 const EntryWrapper = styled.div`
+  padding: 5px;
+  border-radius: 5px;
   width: 100%;
-  height: 200px;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
 
   img {
     width: 100%;
@@ -14,18 +18,67 @@ const EntryWrapper = styled.div`
   .contents {
     flex-grow: 1;
   }
+
+  .contents__title,
+  .contents__description {
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .contents__title {
+    font-weight: 600;
+  }
+
+  .contents__subInfo {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-between;
+  }
+
+  .contetns__channel-id {
+    font-size: 14px;
+    border: 1px solid black;
+  }
+  .contents__published-date {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: right;
+    margin-top: 5px;
+  }
+
 `;
 
-export default function VideoListEntry() {
+export default function VideoListEntry({ imageSrc, id, title, description, channelTitle, publishedDate }) {
+  const [isVideoClicked, setIsVideoClicked] = useState(false);
+
   return (
-    <EntryWrapper>
-      <div>
-        <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/default.jpg" alt="" />
-      </div>
-      <div className="contents">
-        <div>Video Title</div>
-        <div>Video Description</div>
-      </div>
-    </EntryWrapper>
+    <>
+      <EntryWrapper onClick={() => setIsVideoClicked(true)}>
+        <div>
+          <img src={imageSrc} alt="" />
+        </div>
+        <div className="contents">
+          <div className="contents__title">{title}</div>
+          <div className="contents__description">{description}</div>
+          <div className="contents__subInfo">
+            <div className="contents__channel-title">{channelTitle}</div>
+            <div className="contents__published-date">{publishedDate.slice(0, 10)}</div>
+          </div>
+        </div>
+      </EntryWrapper>
+      {
+        isVideoClicked &&
+        <Modal
+          id={id}
+          title={title}
+          description={description}
+          channelTitle={channelTitle}
+          publishedDate={publishedDate}
+          setIsVideoClicked={(isVideoClicked) => setIsVideoClicked(isVideoClicked)}
+        />
+      }
+    </>
   );
 }
