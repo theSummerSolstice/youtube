@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import PropTypes from "prop-types";
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -12,62 +15,97 @@ const ModalWrapper = styled.div`
   align-items: center;
 
   .modal-overlay {
-    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
     width: 100%;
     height: 100%;
-    position: absolute;
+    background-color: rgba(0, 0, 0, 0.6);
   }
-  .video-contents {
-    background-color: black;
-    width: 640px;
-    height: 600px;
-    z-index: 1;
+  .video-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 750px;
+    background-color: black;
+    z-index: 1;
   }
 
-  .video-contents button {
+  .video-container button {
+    align-self: flex-end;
+    margin-right: 10px;
     background-color: black;
     border: none;
     color: white;
     font-size: 45px;
-    align-self: flex-end;
   }
-  .video-contents button:focus {
+
+  .video-container button:focus {
     outline: none;
   }
 
-  .video-contents iframe {
+  .video-container iframe {
+    margin-bottom: 10px;
     border: 0;
-    margin-bottom: 20px;
   }
 
-  .video__title,
+  .video__title {
+    color: white;
+    font-size: 24px;
+    width: 95%;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .video__subinfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 95%;
+  }
   .video__channel-title,
   .video__published-date {
     color: white;
+    font-size: 18px;
+  }
+  .video__published-date {
+    font-weight: 200;
+    opacity: 0.7;
   }
 `;
 
-export default function Modal ({ id, title, description, channelTitle, publishedDate, setIsVideoClicked }) {
+export default function Modal ({ id, title, channelTitle, publishedDate, setIsVideoClicked }) {
+  useEffect(() => {
+    document.documentElement.style.cssText = `overflow: hidden`;
+    return () => document.documentElement.style.cssText = `overflow: visible`
+  }, []);
+
   return (
     <ModalWrapper>
       <div className="modal-overlay" onClick={() => setIsVideoClicked(false)}></div>
-      <div className="video-contents">
-        <button onClick={() => setIsVideoClicked(false)}>X</button>
-        <iframe
-          title={id}
-          width="640"
-          height="360"
-          src={`https://www.youtube.com/embed/${id}`}
-          allowFullScreen
-        ></iframe>
-        {/* <div className="video__description">{description}</div> */}
+      <div className="video-container">
+        <button onClick={() => setIsVideoClicked(false)}><FontAwesomeIcon icon={faTimes} size="xs" /></button>
+        <div className="video__content">
+          <iframe
+            title={id}
+            width="720"
+            height="400"
+            src={`https://www.youtube.com/embed/${id}`}
+            allowFullScreen
+          ></iframe>
+        </div>
         <div className="video__title">{title}</div>
-        <div className="video__channel-title">{channelTitle}</div>
-        <div className="video__published-date">{publishedDate}</div>
+        <div className="video__subinfo">
+          <div className="video__channel-title">{channelTitle}</div>
+          <div className="video__published-date">{publishedDate.slice(0, 10)}</div>
+        </div>
       </div>
     </ModalWrapper>
   );
 }
+
+Modal.propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  channelTitle: PropTypes.string.isRequired,
+  publishedDate: PropTypes.string.isRequired,
+  setIsVideoClicked: PropTypes.func.isRequired,
+};

@@ -13,6 +13,7 @@ export default function App() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const [scrollStatus, setScrollStatus] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const infiniteScroll = () => {
     let scrollHeight = document.documentElement.scrollHeight;
@@ -21,6 +22,7 @@ export default function App() {
 
     if (scrollTop + clientHeight === scrollHeight) {
       setScrollStatus(true);
+      setIsLoading(true);
     } else {
       setScrollStatus(false);
     }
@@ -46,6 +48,8 @@ export default function App() {
             searchKeyword={debouncedKeyword}
             scrollStatus={scrollStatus}
             updateScrollStatus={(scrollStatus) => setScrollStatus(scrollStatus)}
+            isLoading={isLoading}
+            updateLoadingStatus={(isLoading) => setIsLoading(isLoading)}
           />
         </Container>
       </Main>

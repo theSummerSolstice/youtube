@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Modal from "../Modal";
+import PropTypes from "prop-types";
 
 const EntryWrapper = styled.div`
   padding: 5px;
@@ -19,7 +20,7 @@ const EntryWrapper = styled.div`
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    height: 100%;
+    padding: 10px;
   }
 
   .contents__title,
@@ -32,11 +33,16 @@ const EntryWrapper = styled.div`
 
   .contents__title {
     font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 10px;
   }
 
+  .contents__description {
+    color: rgba(0, 0, 0, 0.5);
+    margin-bottom: 20px;
+  }
   .contents__subInfo {
     display: flex;
-    margin: 10px 0;
     justify-content: space-between;
     align-items: space-between;
   }
@@ -47,7 +53,7 @@ const EntryWrapper = styled.div`
   }
   .contents__published-date {
     font-size: 12px;
-    color: rgba(0, 0, 0, 0.5);
+    color: val(--font-color-grey);
     text-align: right;
   }
 
@@ -85,3 +91,12 @@ export default function VideoListEntry({ imageSrc, id, title, description, chann
     </>
   );
 }
+
+VideoListEntry.propTypes = {
+  imageSrc: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string,
+  channelTitle: PropTypes.string.isRequired,
+  publishedDate: PropTypes.string.isRequired,
+};

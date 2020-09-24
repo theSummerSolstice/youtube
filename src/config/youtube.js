@@ -1,5 +1,5 @@
 // ✅ Youtube API Key를 넣으세요.
-export const YOUTUBE_API_KEY = "AIzaSyCgC9PowngM_0gjO9G6gj9UYKSeMmGzFDQ";
+export const YOUTUBE_API_KEY = "AIzaSyCgh9CCAQBLt8tbl6T6VZV20zDry9jPjmA";
 
 // AIzaSyCgh9CCAQBLt8tbl6T6VZV20zDry9jPjmA
 // AIzaSyDkq2Mz1V4rfs2ulRlOuC6jRCVVXG6If2s

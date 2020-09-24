@@ -1,79 +1,82 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import VideoListEntry from "../VideoListEntry";
 import { searchYoutube, getPopularYoutube } from "../../api/youtube";
-import Loading from "../Loading";
+import Loader from 'halogen/BeatLoader.js';
+import PropTypes from "prop-types";
 
 const Wrapper = styled.div`
   display: grid;
   padding: 2em 0 0;
   width: 100%;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-auto-rows: 2fr;
   column-gap: 20px;
   row-gap: 20px;
 `;
 
-export default function VideoList({ searchKeyword, scrollStatus }) {
+const LoadingWrapper = styled.div`
+  margin: 50px auto;
+  text-align: center;
+`;
+
+export default function VideoList({ searchKeyword, scrollStatus, isLoading }) {
   const MAX_RESULTS = 10;
   const REGION_CODE = "KR";
-  const SAFE_SEARCH = "strict";
   const TYPE = "video";
 
   const [videoList, setVideoList] = useState([]);
   const [nextVideoList, setNextVideoList] = useState("");
   const [nextPopularVideoList, setNextPopularVideoList] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
-  // 데이터 가져오는 함수 2개를 외부로 빼버리기
-  const getSearchList = async () => {
-    const searchResult = await searchYoutube({
-      maxResults: MAX_RESULTS,
-      safeSearch: SAFE_SEARCH,
-      type: TYPE,
-      pageToken: nextVideoList,
-      q: searchKeyword,
-    });
+  const searchOptions = {
+    maxResults: MAX_RESULTS,
+    regionCode: REGION_CODE,
+    type: TYPE,
+    pageToken: nextVideoList,
+    q: searchKeyword,
+  };
 
+  const popularOptions = {
+    chart: "mostPopular",
+    maxResults: MAX_RESULTS,
+    regionCode: REGION_CODE,
+    type: TYPE,
+    pageToken: nextPopularVideoList,
+  };
+
+  const getSearchList = async (options) => {
+    const searchResult = await searchYoutube(options);
     return searchResult;
   };
 
-  const getPopularList = async () => {
-    const popularResult = await getPopularYoutube({
-      chart: "mostPopular",
-      maxResults: MAX_RESULTS,
-      regionCode: REGION_CODE,
-      type: TYPE,
-      pageToken: nextPopularVideoList,
-    });
-
+  const getPopularList = async (options) => {
+    const popularResult = await getPopularYoutube(options);
     return popularResult;
   };
 
   useEffect(() => {
     try {
       if (searchKeyword) {
-        getSearchList().then(result => {
+        getSearchList(searchOptions).then(result => {
           setNextVideoList(result.nextPageToken);
           setVideoList(result.items);
         });
       } else {
-        getPopularList().then(result => {
+        getPopularList(popularOptions).then(result => {
           setNextPopularVideoList(result.nextPageToken);
           setVideoList(result.items);
         });
       }
     } catch {
-      // error 처리
-    } finally {
-      setIsLoading(true);
+      // 오류 처리 필요
     }
   }, [searchKeyword]);
 
   useEffect(() => {
     if (!scrollStatus) return;
     if (searchKeyword) {
-      getSearchList().then(result => {
+      getSearchList(searchOptions).then(result => {
         setVideoList([
           ...videoList,
           ...result.items
@@ -81,7 +84,7 @@ export default function VideoList({ searchKeyword, scrollStatus }) {
         setNextVideoList(result.nextPageToken);
       });
     } else {
-      getPopularList().then(result => {
+      getPopularList(popularOptions).then(result => {
         setVideoList([
           ...videoList,
           ...result.items
@@ -111,9 +114,17 @@ export default function VideoList({ searchKeyword, scrollStatus }) {
           })
         }
       </Wrapper>
-      {
-        isLoading && <Loading text="Loading" speed="300" />
-      }
+      <LoadingWrapper>
+        {
+          isLoading && <Loader color="#000000" size="16px" margin="4px" />
+        }
+      </LoadingWrapper>
     </>
   );
 }
+
+VideoList.propTypes = {
+  searchKeyword: PropTypes.string,
+  scrollStatus: PropTypes.bool,
+  isLoading: PropTypes.bool,
+};

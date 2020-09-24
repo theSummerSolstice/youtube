@@ -4,6 +4,7 @@ import logo from "../../assets/logo.svg";
 import SearchInput from "../SearchInput";
 import Container from "../shared/Container";
 import Heading from "../shared/Heading";
+import PropTypes from "prop-types";
 
 const Header = styled.header`
   position: fixed;
@@ -62,3 +63,9 @@ export default function AppHeader({ searchKeyword, updateSearchKeyword, updateDe
     </Header>
   );
 }
+
+AppHeader.propTypes = {
+  searchKeyword: PropTypes.string,
+  updateSearchKeyword: PropTypes.func,
+  updateDebouncedKeyword: PropTypes.func,
+};
