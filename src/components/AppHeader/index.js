@@ -40,7 +40,7 @@ const Header = styled.header`
   }
 `;
 
-export default function AppHeader({ searchKeyword, updateSearchKeyword, updateKeywordSubmitted }) {
+export default function AppHeader({ searchKeyword, updateSearchKeyword, updateDebouncedKeyword }) {
   return (
     <Header>
       <Container>
@@ -54,7 +54,7 @@ export default function AppHeader({ searchKeyword, updateSearchKeyword, updateKe
               placeholder="Youtube 검색"
               onChange={updateSearchKeyword}
               value={searchKeyword}
-              updateKeywordSubmitted={updateKeywordSubmitted}
+              updateDebouncedKeyword={updateDebouncedKeyword}
             />
           </div>
         </section>

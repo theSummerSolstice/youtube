@@ -5,14 +5,13 @@ import styled from "styled-components";
 import Container from "../shared/Container";
 import throttle from "lodash/throttle";
 
-
 const Main = styled.main`
   margin-top: 110px;
 `;
 
 export default function App() {
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [isKeywordSubmitted, setIsKeywordSubmitted] = useState(false);
+  const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const [scrollStatus, setScrollStatus] = useState(false);
 
   const infiniteScroll = () => {
@@ -38,16 +37,13 @@ export default function App() {
     <>
       <AppHeader
         searchKeyword={searchKeyword}
-        updateSearchKeyword={(searchKeyword) => setSearchKeyword(searchKeyword)}
-        updateKeywordSubmitted={(isKeywordSubmitted) => setIsKeywordSubmitted(isKeywordSubmitted)}
+        updateSearchKeyword={setSearchKeyword}
+        updateDebouncedKeyword={setDebouncedKeyword}
       />
       <Main>
         <Container>
           <VideoList
-            searchKeyword={searchKeyword}
-            updateSearchKeyword={(searchKeyword) => setSearchKeyword(searchKeyword)}
-            isKeywordSubmitted={isKeywordSubmitted}
-            updateKeywordSubmitted={(isKeywordSubmitted) => setIsKeywordSubmitted(isKeywordSubmitted)}
+            searchKeyword={debouncedKeyword}
             scrollStatus={scrollStatus}
             updateScrollStatus={(scrollStatus) => setScrollStatus(scrollStatus)}
           />

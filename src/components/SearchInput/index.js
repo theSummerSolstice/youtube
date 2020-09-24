@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useCallback } from "react";
 import Input from "../shared/Input";
+import debounce from "lodash/debounce";
 
 // ✅ PropTypes는 무슨 용도일까요?
 // 조사해보시고 다른 컴포넌트에도 폭넓게 적용해보세요.
 import PropTypes from "prop-types";
 
-export default function SearchInput({ onChange, placeholder, value, updateKeywordSubmitted }) {
-  function handleKeyPress (ev) {
-    if (ev.keyCode === 13) {
-      updateKeywordSubmitted(true);
-    }
+export default function SearchInput({ onChange, placeholder, value, updateDebouncedKeyword}) {
+
+  const debounced = useCallback(debounce((value) => updateDebouncedKeyword(value), 500), []);
+
+  function handleChange (ev) {
+    const target = ev.target.value;
+    onChange(target);
+    debounced(target);
   }
 
   return (
@@ -17,8 +21,7 @@ export default function SearchInput({ onChange, placeholder, value, updateKeywor
       type="text"
       placeholder={placeholder}
       value={value}
-      onChange={(ev) => onChange(ev.target.value)}
-      onKeyUp={(ev) => handleKeyPress(ev)}
+      onChange={handleChange}
     />
   );
 }

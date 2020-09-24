@@ -17,6 +17,9 @@ const EntryWrapper = styled.div`
 
   .contents {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   .contents__title,
@@ -33,8 +36,9 @@ const EntryWrapper = styled.div`
 
   .contents__subInfo {
     display: flex;
-    margin-top: 10px;
+    margin: 10px 0;
     justify-content: space-between;
+    align-items: space-between;
   }
 
   .contetns__channel-id {
@@ -45,7 +49,6 @@ const EntryWrapper = styled.div`
     font-size: 12px;
     color: rgba(0, 0, 0, 0.5);
     text-align: right;
-    margin-top: 5px;
   }
 
 `;
