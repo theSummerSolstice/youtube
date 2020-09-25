@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import VideoListEntry from "../VideoListEntry";
-import { searchYoutube, getPopularYoutube } from "../../api/youtube";
+import { getPopularYoutube } from "../../api/youtube";
 import Loader from 'halogen/BeatLoader.js';
 import PropTypes from "prop-types";
 
@@ -20,22 +20,13 @@ const LoadingWrapper = styled.div`
   text-align: center;
 `;
 
-export default function VideoList({ searchKeyword, scrollStatus, isLoading }) {
+export default function PopularVideoList({ scrollStatus, isLoading }) {
   const MAX_RESULTS = 10;
   const REGION_CODE = "KR";
   const TYPE = "video";
 
   const [videoList, setVideoList] = useState([]);
-  const [nextVideoList, setNextVideoList] = useState("");
   const [nextPopularVideoList, setNextPopularVideoList] = useState("");
-
-  const searchOptions = {
-    maxResults: MAX_RESULTS,
-    regionCode: REGION_CODE,
-    type: TYPE,
-    pageToken: nextVideoList,
-    q: searchKeyword,
-  };
 
   const popularOptions = {
     chart: "mostPopular",
@@ -45,45 +36,20 @@ export default function VideoList({ searchKeyword, scrollStatus, isLoading }) {
     pageToken: nextPopularVideoList,
   };
 
-  const getSearchList = async (options) => {
-    const searchResult = await searchYoutube(options);
-    return searchResult;
-  };
-
   const getPopularList = async (options) => {
     const popularResult = await getPopularYoutube(options);
     return popularResult;
   };
 
   useEffect(() => {
-    try {
-      if (searchKeyword) {
-        getSearchList(searchOptions).then(result => {
-          setNextVideoList(result.nextPageToken);
-          setVideoList(result.items);
-        });
-      } else {
-        getPopularList(popularOptions).then(result => {
-          setNextPopularVideoList(result.nextPageToken);
-          setVideoList(result.items);
-        });
-      }
-    } catch {
-      // 오류 처리 필요
-    }
-  }, [searchKeyword]);
+    getPopularList(popularOptions).then(result => {
+      setNextPopularVideoList(result.nextPageToken);
+      setVideoList(result.items);
+    });
+  }, []);
 
   useEffect(() => {
     if (!scrollStatus) return;
-    if (searchKeyword) {
-      getSearchList(searchOptions).then(result => {
-        setVideoList([
-          ...videoList,
-          ...result.items
-        ]);
-        setNextVideoList(result.nextPageToken);
-      });
-    } else {
       getPopularList(popularOptions).then(result => {
         setVideoList([
           ...videoList,
@@ -91,7 +57,6 @@ export default function VideoList({ searchKeyword, scrollStatus, isLoading }) {
         ]);
         setNextPopularVideoList(result.nextPageToken);
       });
-    }
   }, [scrollStatus]);
 
   return (
@@ -102,8 +67,8 @@ export default function VideoList({ searchKeyword, scrollStatus, isLoading }) {
             const { id, snippet } = list;
             return (
               <VideoListEntry
-                key={typeof(id) === "string" ? id : id.videoId}
-                id={id.videoId || id}
+                key={id}
+                id={id}
                 imageSrc={snippet.thumbnails.high.url}
                 title={snippet.title}
                 description={snippet.description}
@@ -123,8 +88,7 @@ export default function VideoList({ searchKeyword, scrollStatus, isLoading }) {
   );
 }
 
-VideoList.propTypes = {
-  searchKeyword: PropTypes.string,
+PopularVideoList.propTypes = {
   scrollStatus: PropTypes.bool,
   isLoading: PropTypes.bool,
 };

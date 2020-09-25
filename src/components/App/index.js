@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import VideoList from "../VideoList";
+import SearchVideoList from "../SearchVideoList";
+import PopularVideoList from "../PopularVideoList";
 import AppHeader from "../AppHeader";
 import styled from "styled-components";
 import Container from "../shared/Container";
@@ -44,13 +45,18 @@ export default function App() {
       />
       <Main>
         <Container>
-          <VideoList
-            searchKeyword={debouncedKeyword}
-            scrollStatus={scrollStatus}
-            updateScrollStatus={(scrollStatus) => setScrollStatus(scrollStatus)}
-            isLoading={isLoading}
-            updateLoadingStatus={(isLoading) => setIsLoading(isLoading)}
-          />
+          {
+            debouncedKeyword
+            ? <SearchVideoList
+                searchKeyword={debouncedKeyword}
+                scrollStatus={scrollStatus}
+                isLoading={isLoading}
+              />
+            : <PopularVideoList
+                scrollStatus={scrollStatus}
+                isLoading={isLoading}
+              />
+          }
         </Container>
       </Main>
     </>

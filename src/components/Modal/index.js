@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from "prop-types";
+import { useParams } from 'react-router-dom';
 
 const ModalWrapper = styled.div`
   position: fixed;
