@@ -53,10 +53,10 @@ export default function VideoContents ({ id, title, channelTitle, publishedDate 
           allowFullScreen
         ></iframe>
       </div>
-      <div className="video__title">{title}</div>
+      <h1 className="video__title">{title}</h1>
       <div className="video__subinfo">
-        <div className="video__channel-title">{channelTitle}</div>
-        <div className="video__published-date">{publishedDate.slice(0, 10)}</div>
+        <span className="video__channel-title">{channelTitle}</span>
+        <span className="video__published-date">{publishedDate.slice(0, 10)}</span>
       </div>
     </VideoWrapper>
   );

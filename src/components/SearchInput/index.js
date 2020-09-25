@@ -7,9 +7,11 @@ import Input from "../shared/Input";
 import PropTypes from "prop-types";
 
 export default function SearchInput ({ onChange, placeholder, value, updateDebouncedKeyword }) {
-  const debounced = useCallback(debounce((value) => updateDebouncedKeyword(value), 500), []);
+  const debounced = useCallback(
+    debounce((value) => updateDebouncedKeyword(value), 500),
+  []);
 
-  function handleChange (ev) {
+  const handleChange = (ev) => {
     const target = ev.target.value;
     onChange(target);
     debounced(target);

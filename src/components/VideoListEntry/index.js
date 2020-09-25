@@ -27,7 +27,7 @@ const EntryWrapper = styled.div`
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    padding: 10px;
+    padding: 0 10px;
 
     .contents__title,
     .contents__description {
@@ -38,29 +38,29 @@ const EntryWrapper = styled.div`
     }
 
     .contents__title {
-      margin-bottom: 10px;
+      margin: 10px 0 5px;
       font-weight: 600;
       font-size: 20px;
     }
 
     .contents__description {
-      margin-bottom: 20px;
+      margin: 0 0 10px;
       color: rgba(0, 0, 0, 0.5);
     }
+
     .contents__subInfo {
       display: flex;
       justify-content: space-between;
-      align-items: space-between;
-    }
+      align-items: flex-end;
 
-    .contetns__channel-id {
-      font-size: 14px;
-      border: 1px solid black;
-    }
-    .contents__published-date {
-      font-size: 12px;
-      color: val(--font-color-grey);
-      text-align: right;
+      .contents__channel-title {
+        font-size: 16px;
+      }
+
+      .contents__published-date {
+        font-size: 12px;
+        text-align: right;
+      }
     }
   }
 `;
@@ -76,11 +76,11 @@ export default function VideoListEntry ({ imageSrc, id, title, description, chan
             <img src={imageSrc} alt="thumbnail" />
           </div>
           <div className="contents">
-            <div className="contents__title">{title}</div>
-            <div className="contents__description">{description}</div>
+            <h3 className="contents__title">{title}</h3>
+            <p className="contents__description">{description}</p>
             <div className="contents__subInfo">
-              <div className="contents__channel-title">{channelTitle}</div>
-              <div className="contents__published-date">{publishedDate.slice(0, 10)}</div>
+              <span className="contents__channel-title">{channelTitle}</span>
+              <span className="contents__published-date">{publishedDate.slice(0, 10)}</span>
             </div>
           </div>
         </EntryWrapper>
