@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Route } from "react-router-dom";
 import styled from "styled-components";
 import throttle from "lodash/throttle";
-
 import Container from "../shared/Container";
 import AppHeader from "../AppHeader";
 import SearchVideoList from "../SearchVideoList";
@@ -12,7 +11,7 @@ const Main = styled.main`
   margin-top: 110px;
 `;
 
-export default function App() {
+export default function App () {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
   const [scrollStatus, setScrollStatus] = useState(false);

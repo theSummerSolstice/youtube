@@ -7,12 +7,12 @@ import { searchYoutube } from "../../api/youtube";
 
 const Wrapper = styled.div`
   display: grid;
-  padding: 2em 0 0;
-  width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-auto-rows: 2fr;
   column-gap: 20px;
   row-gap: 20px;
+  width: 100%;
+  padding: 2em 0 0;
 `;
 
 const LoadingWrapper = styled.div`
@@ -20,13 +20,14 @@ const LoadingWrapper = styled.div`
   text-align: center;
 `;
 
-export default function SearchVideoList({ searchKeyword, scrollStatus, isLoading }) {
-  const MAX_RESULTS = 10;
-  const REGION_CODE = "KR";
-  const TYPE = "video";
+const MAX_RESULTS = 10;
+const REGION_CODE = "KR";
+const TYPE = "video";
 
+export default function SearchVideoList ({ searchKeyword, scrollStatus, isLoading }) {
   const [videoList, setVideoList] = useState([]);
   const [nextVideoList, setNextVideoList] = useState("");
+  const [error, setError] = useState("");
 
   const searchOptions = {
     maxResults: MAX_RESULTS,
@@ -42,26 +43,35 @@ export default function SearchVideoList({ searchKeyword, scrollStatus, isLoading
   };
 
   useEffect(() => {
-    getSearchList(searchOptions).then(result => {
-      setNextVideoList(result.nextPageToken);
-      setVideoList(result.items);
-    });
+    getSearchList(searchOptions)
+      .then(result => {
+        setNextVideoList(result.nextPageToken);
+        setVideoList(result.items);
+      })
+      .catch(error => {
+        setError(error);
+      });
   }, [searchKeyword]);
 
   useEffect(() => {
     if (!scrollStatus) return;
-    getSearchList(searchOptions).then(result => {
-      setVideoList([
-        ...videoList,
-        ...result.items
-      ]);
-      setNextVideoList(result.nextPageToken);
-    });
+    getSearchList(searchOptions)
+      .then(result => {
+        setVideoList([
+          ...videoList,
+          ...result.items,
+        ]);
+        setNextVideoList(result.nextPageToken);
+      })
+      .catch(error => {
+        setError(error);
+      });
   }, [scrollStatus]);
 
   return (
     <>
       <Wrapper>
+        { error && error.message }
         {
           videoList.map((list) => {
             const { id, snippet } = list;

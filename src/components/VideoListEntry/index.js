@@ -3,16 +3,18 @@ import { Route, Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Modal from "../Modal";
+import VideoContents from "../VideoContents";
 
 const EntryWrapper = styled.div`
-  padding: 5px;
-  border-radius: 5px;
-  width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  padding: 5px;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   box-sizing: border-box;
+
   :hover {
     border: 1px solid rgba(0, 0, 0, 0.25);
   }
@@ -22,48 +24,48 @@ const EntryWrapper = styled.div`
   }
 
   .contents {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     padding: 10px;
-  }
 
-  .contents__title,
-  .contents__description {
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+    .contents__title,
+    .contents__description {
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
-  .contents__title {
-    font-weight: 600;
-    font-size: 20px;
-    margin-bottom: 10px;
-  }
+    .contents__title {
+      margin-bottom: 10px;
+      font-weight: 600;
+      font-size: 20px;
+    }
 
-  .contents__description {
-    color: rgba(0, 0, 0, 0.5);
-    margin-bottom: 20px;
-  }
-  .contents__subInfo {
-    display: flex;
-    justify-content: space-between;
-    align-items: space-between;
-  }
+    .contents__description {
+      margin-bottom: 20px;
+      color: rgba(0, 0, 0, 0.5);
+    }
+    .contents__subInfo {
+      display: flex;
+      justify-content: space-between;
+      align-items: space-between;
+    }
 
-  .contetns__channel-id {
-    font-size: 14px;
-    border: 1px solid black;
-  }
-  .contents__published-date {
-    font-size: 12px;
-    color: val(--font-color-grey);
-    text-align: right;
+    .contetns__channel-id {
+      font-size: 14px;
+      border: 1px solid black;
+    }
+    .contents__published-date {
+      font-size: 12px;
+      color: val(--font-color-grey);
+      text-align: right;
+    }
   }
 `;
 
-export default function VideoListEntry({ imageSrc, id, title, description, channelTitle, publishedDate }) {
+export default function VideoListEntry ({ imageSrc, id, title, description, channelTitle, publishedDate }) {
   const [isVideoClicked, setIsVideoClicked] = useState(false);
 
   return (
@@ -86,14 +88,15 @@ export default function VideoListEntry({ imageSrc, id, title, description, chann
       {
         isVideoClicked &&
         <Route path="/watch/:videoId">
-          <Modal
-            id={id}
-            title={title}
-            description={description}
-            channelTitle={channelTitle}
-            publishedDate={publishedDate}
-            setIsVideoClicked={(isVideoClicked) => setIsVideoClicked(isVideoClicked)} // children 으로 바꾸기
-          />
+          <Modal onClick={(isVideoClicked) => setIsVideoClicked(isVideoClicked)}>
+            <VideoContents
+              id={id}
+              title={title}
+              description={description}
+              channelTitle={channelTitle}
+              publishedDate={publishedDate}
+            />
+          </Modal>
         </Route>
       }
     </>

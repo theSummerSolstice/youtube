@@ -1,7 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-
 import logo from "../../assets/logo.svg";
 import Container from "../shared/Container";
 import Heading from "../shared/Heading";
@@ -10,17 +9,17 @@ import SearchInput from "../SearchInput";
 
 const Header = styled.header`
   position: fixed;
-  background-color: #ffffff;
-  width: 100%;
   top: 0;
+  width: 100%;
+  background-color: #ffffff;
   box-shadow: 0px 1px 5px 1px rgba(0, 0, 0, 0.1);
 
   section {
-    text-align: center;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     padding: 2em 0;
+    text-align: center;
   }
 
   .brand {
@@ -43,7 +42,7 @@ const Header = styled.header`
   }
 `;
 
-export default function AppHeader({ searchKeyword, updateSearchKeyword, updateDebouncedKeyword }) {
+export default function AppHeader ({ searchKeyword, updateSearchKeyword, updateDebouncedKeyword }) {
   return (
     <Header>
       <Container>

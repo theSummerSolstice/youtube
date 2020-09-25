@@ -2,18 +2,17 @@ import React, { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import Loader from 'halogen/BeatLoader.js';
-
 import VideoListEntry from "../VideoListEntry";
 import { getPopularYoutube } from "../../api/youtube";
 
 const Wrapper = styled.div`
   display: grid;
-  padding: 2em 0 0;
-  width: 100%;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   grid-auto-rows: 2fr;
   column-gap: 20px;
   row-gap: 20px;
+  width: 100%;
+  padding: 2em 0 0;
 `;
 
 const LoadingWrapper = styled.div`
@@ -21,48 +20,59 @@ const LoadingWrapper = styled.div`
   text-align: center;
 `;
 
-export default function PopularVideoList({ scrollStatus, isLoading }) {
-  const MAX_RESULTS = 10;
-  const REGION_CODE = "KR";
-  const TYPE = "video";
+const CHART = "mostPopular";
+const MAX_RESULTS = 10;
+const REGION_CODE = "KR";
+const TYPE = "video";
 
+export default function PopularVideoList ({ scrollStatus, isLoading }) {
   const [videoList, setVideoList] = useState([]);
   const [nextPopularVideoList, setNextPopularVideoList] = useState("");
+  const [error, setError] = useState("");
 
   const popularOptions = {
-    chart: "mostPopular",
+    chart: CHART,
     maxResults: MAX_RESULTS,
     regionCode: REGION_CODE,
     type: TYPE,
     pageToken: nextPopularVideoList,
   };
 
-  const getPopularList = useCallback(async (options) => {
+  const getPopularList = async (options) => {
     const popularResult = await getPopularYoutube(options);
     return popularResult;
-  }, []);
+  };
 
   useEffect(() => {
-    getPopularList(popularOptions).then(result => {
-      setNextPopularVideoList(result.nextPageToken);
-      setVideoList(result.items);
-    });
+    getPopularList(popularOptions)
+      .then(result => {
+        setNextPopularVideoList(result.nextPageToken);
+        setVideoList(result.items)
+      })
+      .catch(error => {
+        setError(error);
+      });
   }, []);
 
   useEffect(() => {
     if (!scrollStatus) return;
-      getPopularList(popularOptions).then(result => {
+    getPopularList(popularOptions)
+      .then(result => {
         setVideoList([
           ...videoList,
-          ...result.items
+          ...result.items,
         ]);
         setNextPopularVideoList(result.nextPageToken);
+      })
+      .catch(error => {
+        setError(error);
       });
   }, [scrollStatus]);
 
   return (
     <>
       <Wrapper>
+        { error && error.message }
         {
           videoList.map((list) => {
             const { id, snippet } = list;

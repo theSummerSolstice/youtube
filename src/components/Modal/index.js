@@ -5,16 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Link } from "react-router-dom";
 
-
 const ModalWrapper = styled.div`
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  height: 100%;
 
   .modal-overlay {
     position: absolute;
@@ -22,96 +21,44 @@ const ModalWrapper = styled.div`
     height: 100%;
     background-color: rgba(0, 0, 0, 0.6);
   }
-  .video-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 750px;
-    background-color: black;
-    z-index: 1;
-  }
 
-  .video-container button {
+  button > * {
+    position: absolute;
+    top: 30px;
+    right: 30px;
     align-self: flex-end;
     margin-right: 10px;
-    background-color: black;
     border: none;
     color: white;
-    font-size: 45px;
-  }
+    font-size: 40px;
+    z-index: 100;
 
-  .video-container button:focus {
-    outline: none;
-  }
-
-  .video-container iframe {
-    margin-bottom: 10px;
-    border: 0;
-  }
-
-  .video__title {
-    color: white;
-    font-size: 24px;
-    width: 95%;
-    margin-bottom: 20px;
-    text-align: left;
-  }
-  .video__subinfo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    width: 95%;
-  }
-  .video__channel-title,
-  .video__published-date {
-    color: white;
-    font-size: 18px;
-  }
-  .video__published-date {
-    font-weight: 200;
-    opacity: 0.7;
+    &:focus {
+      outline: none;
+    }
   }
 `;
 
-export default function Modal ({ id, title, channelTitle, publishedDate, setIsVideoClicked }) {
+export default function Modal ({ children, onClick }) {
   useEffect(() => {
     document.documentElement.style.cssText = `overflow: hidden`;
-    return () => document.documentElement.style.cssText = `overflow: visible`
+    return () => document.documentElement.style.cssText = `overflow: visible`;
   }, []);
 
   return (
     <ModalWrapper>
-      <div className="modal-overlay" onClick={() => setIsVideoClicked(false)}></div>
-      <div className="video-container">
-        <Link to="/">
-          <button onClick={() => setIsVideoClicked(false)}>
-            <FontAwesomeIcon icon={faTimes} size="xs" />
-          </button>
-        </Link>
-        <div className="video__content">
-          <iframe
-            title={id}
-            width="720"
-            height="400"
-            src={`https://www.youtube.com/embed/${id}`}
-            allowFullScreen
-          ></iframe>
-        </div>
-        <div className="video__title">{title}</div>
-        <div className="video__subinfo">
-          <div className="video__channel-title">{channelTitle}</div>
-          <div className="video__published-date">{publishedDate.slice(0, 10)}</div>
-        </div>
-      </div>
+      <div className="modal-overlay" onClick={() => onClick(false)}></div>
+      <Link to="/">
+        <button onClick={() => onClick(false)}>
+          <FontAwesomeIcon icon={faTimes} size="xs" />
+        </button>
+      </Link>
+      {children}
     </ModalWrapper>
   );
 }
 
 Modal.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  channelTitle: PropTypes.string.isRequired,
-  publishedDate: PropTypes.string.isRequired,
-  setIsVideoClicked: PropTypes.func.isRequired,
-};
+  children: PropTypes.node.isRequired,
+  onClick: PropTypes.func.isRequired,
+}
