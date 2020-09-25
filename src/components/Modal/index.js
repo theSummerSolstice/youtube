@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
-import styled from "styled-components";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
 import PropTypes from "prop-types";
-import { useParams } from 'react-router-dom';
+import styled from "styled-components";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Link } from "react-router-dom";
+
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -83,7 +84,11 @@ export default function Modal ({ id, title, channelTitle, publishedDate, setIsVi
     <ModalWrapper>
       <div className="modal-overlay" onClick={() => setIsVideoClicked(false)}></div>
       <div className="video-container">
-        <button onClick={() => setIsVideoClicked(false)}><FontAwesomeIcon icon={faTimes} size="xs" /></button>
+        <Link to="/">
+          <button onClick={() => setIsVideoClicked(false)}>
+            <FontAwesomeIcon icon={faTimes} size="xs" />
+          </button>
+        </Link>
         <div className="video__content">
           <iframe
             title={id}

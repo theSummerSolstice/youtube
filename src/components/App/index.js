@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { Route } from "react-router-dom";
+import styled from "styled-components";
+import throttle from "lodash/throttle";
+
+import Container from "../shared/Container";
+import AppHeader from "../AppHeader";
 import SearchVideoList from "../SearchVideoList";
 import PopularVideoList from "../PopularVideoList";
-import AppHeader from "../AppHeader";
-import styled from "styled-components";
-import Container from "../shared/Container";
-import throttle from "lodash/throttle";
 
 const Main = styled.main`
   margin-top: 110px;
@@ -52,10 +54,12 @@ export default function App() {
                 scrollStatus={scrollStatus}
                 isLoading={isLoading}
               />
-            : <PopularVideoList
-                scrollStatus={scrollStatus}
-                isLoading={isLoading}
-              />
+            : <Route path="/">
+                <PopularVideoList
+                  scrollStatus={scrollStatus}
+                  isLoading={isLoading}
+                />
+              </Route>
           }
         </Container>
       </Main>

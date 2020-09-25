@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import { Route, Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import styled from "styled-components";
 import Modal from "../Modal";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 const EntryWrapper = styled.div`
   padding: 5px;
@@ -83,17 +83,19 @@ export default function VideoListEntry({ imageSrc, id, title, description, chann
           </div>
         </EntryWrapper>
       </Link>
-        {
-          isVideoClicked &&
+      {
+        isVideoClicked &&
+        <Route path="/watch/:videoId">
           <Modal
             id={id}
             title={title}
             description={description}
             channelTitle={channelTitle}
             publishedDate={publishedDate}
-            setIsVideoClicked={(isVideoClicked) => setIsVideoClicked(isVideoClicked)}
+            setIsVideoClicked={(isVideoClicked) => setIsVideoClicked(isVideoClicked)} // children 으로 바꾸기
           />
-        }
+        </Route>
+      }
     </>
   );
 }

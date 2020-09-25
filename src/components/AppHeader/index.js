@@ -1,10 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
+
 import logo from "../../assets/logo.svg";
-import SearchInput from "../SearchInput";
 import Container from "../shared/Container";
 import Heading from "../shared/Heading";
-import PropTypes from "prop-types";
+import SearchInput from "../SearchInput";
+
 
 const Header = styled.header`
   position: fixed;

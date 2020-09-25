@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import PropTypes from "prop-types";
 import styled from "styled-components";
+import Loader from 'halogen/BeatLoader.js';
+
 import VideoListEntry from "../VideoListEntry";
 import { getPopularYoutube } from "../../api/youtube";
-import Loader from 'halogen/BeatLoader.js';
-import PropTypes from "prop-types";
 
 const Wrapper = styled.div`
   display: grid;
@@ -36,10 +37,10 @@ export default function PopularVideoList({ scrollStatus, isLoading }) {
     pageToken: nextPopularVideoList,
   };
 
-  const getPopularList = async (options) => {
+  const getPopularList = useCallback(async (options) => {
     const popularResult = await getPopularYoutube(options);
     return popularResult;
-  };
+  }, []);
 
   useEffect(() => {
     getPopularList(popularOptions).then(result => {

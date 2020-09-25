@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
-import Input from "../shared/Input";
 import debounce from "lodash/debounce";
+import Input from "../shared/Input";
 
 // ✅ PropTypes는 무슨 용도일까요?
 // 조사해보시고 다른 컴포넌트에도 폭넓게 적용해보세요.
