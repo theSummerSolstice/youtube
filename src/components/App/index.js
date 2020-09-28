@@ -14,7 +14,7 @@ const Main = styled.main`
 export default function App () {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useState("");
-  const [scrollStatus, setScrollStatus] = useState(false);
+  const [isScrollEnd, setIsScrollEnd] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const infiniteScroll = () => {
@@ -22,20 +22,20 @@ export default function App () {
     let scrollTop = document.documentElement.scrollTop;
     let clientHeight = document.documentElement.clientHeight;
 
-    if (scrollTop + clientHeight === scrollHeight) {
-      setScrollStatus(true);
+    if (scrollTop + clientHeight >= scrollHeight * 0.7) {
+      setIsScrollEnd(true);
       setIsLoading(true);
     } else {
-      setScrollStatus(false);
+      setIsScrollEnd(false);
     }
   }
 
-  const throttled = throttle(infiniteScroll, 1000);
+  const handleScroll = throttle(infiniteScroll, 1000);
 
   useEffect(() => {
-    window.addEventListener('scroll', throttled);
-    return () => window.removeEventListener('scroll', throttled);
-  });
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isScrollEnd]);
 
   return (
     <>
@@ -50,12 +50,12 @@ export default function App () {
             debouncedKeyword
             ? <SearchVideoList
                 searchKeyword={debouncedKeyword}
-                scrollStatus={scrollStatus}
+                isScrollEnd={isScrollEnd}
                 isLoading={isLoading}
               />
             : <Route path="/">
                 <PopularVideoList
-                  scrollStatus={scrollStatus}
+                  isScrollEnd={isScrollEnd}
                   isLoading={isLoading}
                 />
               </Route>

@@ -33,4 +33,5 @@ SearchInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   placeholder: PropTypes.string,
   value: PropTypes.string.isRequired,
+  updateDebouncedKeyword: PropTypes.func.isRequired,
 };

@@ -18,6 +18,10 @@ const Wrapper = styled.div`
 const LoadingWrapper = styled.div`
   margin: 50px auto;
   text-align: center;
+
+  &:empty {
+    diplay: none;
+  }
 `;
 
 const CHART = "mostPopular";
@@ -25,17 +29,17 @@ const MAX_RESULTS = 10;
 const REGION_CODE = "KR";
 const TYPE = "video";
 
-export default function PopularVideoList ({ scrollStatus, isLoading }) {
+export default function PopularVideoList ({ isScrollEnd, isLoading }) {
   const [videoList, setVideoList] = useState([]);
-  const [nextPopularVideoList, setNextPopularVideoList] = useState("");
-  const [error, setError] = useState("");
+  const [nextVideoListToken, setNextVideoListToken] = useState("");
+  const [error, setError] = useState(null);
 
   const popularOptions = {
     chart: CHART,
     maxResults: MAX_RESULTS,
     regionCode: REGION_CODE,
     type: TYPE,
-    pageToken: nextPopularVideoList,
+    pageToken: nextVideoListToken,
   };
 
   const getPopularList = async (options) => {
@@ -46,7 +50,7 @@ export default function PopularVideoList ({ scrollStatus, isLoading }) {
   useEffect(() => {
     getPopularList(popularOptions)
       .then(result => {
-        setNextPopularVideoList(result.nextPageToken);
+        setNextVideoListToken(result.nextPageToken);
         setVideoList(result.items)
       })
       .catch(error => {
@@ -55,19 +59,19 @@ export default function PopularVideoList ({ scrollStatus, isLoading }) {
   }, []);
 
   useEffect(() => {
-    if (!scrollStatus) return;
+    if (!isScrollEnd) return;
     getPopularList(popularOptions)
       .then(result => {
         setVideoList([
           ...videoList,
           ...result.items,
         ]);
-        setNextPopularVideoList(result.nextPageToken);
+        setNextVideoListToken(result.nextPageToken);
       })
       .catch(error => {
         setError(error);
       });
-  }, [scrollStatus]);
+  }, [isScrollEnd]);
 
   return (
     <>
@@ -100,6 +104,6 @@ export default function PopularVideoList ({ scrollStatus, isLoading }) {
 }
 
 PopularVideoList.propTypes = {
-  scrollStatus: PropTypes.bool,
+  isScrollEnd: PropTypes.bool,
   isLoading: PropTypes.bool,
 };

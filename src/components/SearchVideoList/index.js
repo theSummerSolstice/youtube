@@ -24,16 +24,16 @@ const MAX_RESULTS = 10;
 const REGION_CODE = "KR";
 const TYPE = "video";
 
-export default function SearchVideoList ({ searchKeyword, scrollStatus, isLoading }) {
+export default function SearchVideoList ({ searchKeyword, isScrollEnd, isLoading }) {
   const [videoList, setVideoList] = useState([]);
-  const [nextVideoList, setNextVideoList] = useState("");
-  const [error, setError] = useState("");
+  const [nextVideoListToken, setNextVideoListToken] = useState("");
+  const [error, setError] = useState(null);
 
   const searchOptions = {
     maxResults: MAX_RESULTS,
     regionCode: REGION_CODE,
     type: TYPE,
-    pageToken: nextVideoList,
+    pageToken: nextVideoListToken,
     q: searchKeyword,
   };
 
@@ -45,7 +45,7 @@ export default function SearchVideoList ({ searchKeyword, scrollStatus, isLoadin
   useEffect(() => {
     getSearchList(searchOptions)
       .then(result => {
-        setNextVideoList(result.nextPageToken);
+        setNextVideoListToken(result.nextPageToken);
         setVideoList(result.items);
       })
       .catch(error => {
@@ -54,19 +54,19 @@ export default function SearchVideoList ({ searchKeyword, scrollStatus, isLoadin
   }, [searchKeyword]);
 
   useEffect(() => {
-    if (!scrollStatus) return;
+    if (!isScrollEnd) return;
     getSearchList(searchOptions)
       .then(result => {
         setVideoList([
           ...videoList,
           ...result.items,
         ]);
-        setNextVideoList(result.nextPageToken);
+        setNextVideoListToken(result.nextPageToken);
       })
       .catch(error => {
         setError(error);
       });
-  }, [scrollStatus]);
+  }, [isScrollEnd]);
 
   return (
     <>
@@ -100,6 +100,6 @@ export default function SearchVideoList ({ searchKeyword, scrollStatus, isLoadin
 
 SearchVideoList.propTypes = {
   searchKeyword: PropTypes.string,
-  scrollStatus: PropTypes.bool,
+  isScrollEnd: PropTypes.bool,
   isLoading: PropTypes.bool,
 };

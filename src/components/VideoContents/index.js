@@ -51,7 +51,7 @@ export default function VideoContents ({ id, title, channelTitle, publishedDate 
           height="400"
           src={`https://www.youtube.com/embed/${id}`}
           allowFullScreen
-        ></iframe>
+        />
       </div>
       <h1 className="video__title">{title}</h1>
       <div className="video__subinfo">

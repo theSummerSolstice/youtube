@@ -66,7 +66,7 @@ export default function AppHeader ({ searchKeyword, updateSearchKeyword, updateD
 }
 
 AppHeader.propTypes = {
-  searchKeyword: PropTypes.string,
-  updateSearchKeyword: PropTypes.func,
-  updateDebouncedKeyword: PropTypes.func,
+  searchKeyword: PropTypes.string.isRequired,
+  updateSearchKeyword: PropTypes.func.isRequired,
+  updateDebouncedKeyword: PropTypes.func.isRequired,
 };

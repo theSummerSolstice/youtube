@@ -18,8 +18,8 @@ export const searchYoutube = async (options) => {
   )}`;
 
   try {
-    const res = await fetch(YOUTUBE_URL);
-    const data = await res.json();
+    const data = await fetch(YOUTUBE_URL)
+      .then(res => res.json());
 
     return data;
   } catch (err) {
@@ -33,8 +33,8 @@ export const getPopularYoutube = async (options) => {
   )}`;
 
   try {
-    const res = await fetch(YOUTUBE_URL);
-    const data = await res.json();
+    const data = await fetch(YOUTUBE_URL)
+      .then(res => res.json());
 
     return data;
   } catch (err) {

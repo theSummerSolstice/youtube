@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import styled from "styled-components";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const ModalWrapper = styled.div`
   position: fixed;
@@ -39,20 +39,24 @@ const ModalWrapper = styled.div`
   }
 `;
 
-export default function Modal ({ children, onClick }) {
+export default function Modal ({ children }) {
   useEffect(() => {
-    document.documentElement.style.cssText = `overflow: hidden`;
-    return () => document.documentElement.style.cssText = `overflow: visible`;
+    document.body.style.overflow = "hidden";
+    return () => document.body.style.overflow = "visible";
   }, []);
+
+  let history = useHistory();
+
+  const handleClick = () => {
+    history.push("/");
+  };
 
   return (
     <ModalWrapper>
-      <div className="modal-overlay" onClick={() => onClick(false)}></div>
-      <Link to="/">
-        <button onClick={() => onClick(false)}>
-          <FontAwesomeIcon icon={faTimes} size="xs" />
-        </button>
-      </Link>
+      <div className="modal-overlay" onClick={handleClick}></div>
+      <button onClick={handleClick}>
+        <FontAwesomeIcon icon={faTimes} size="xs" />
+      </button>
       {children}
     </ModalWrapper>
   );
@@ -60,5 +64,4 @@ export default function Modal ({ children, onClick }) {
 
 Modal.propTypes = {
   children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
-}
+};

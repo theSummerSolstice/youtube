@@ -88,7 +88,7 @@ export default function VideoListEntry ({ imageSrc, id, title, description, chan
       {
         isVideoClicked &&
         <Route path="/watch/:videoId">
-          <Modal onClick={(isVideoClicked) => setIsVideoClicked(isVideoClicked)}>
+          <Modal>
             <VideoContents
               id={id}
               title={title}
