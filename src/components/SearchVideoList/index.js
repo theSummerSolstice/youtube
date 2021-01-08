@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
-import Loader from 'halogen/BeatLoader.js';
 import VideoListEntry from "../VideoListEntry";
 import { searchYoutube } from "../../api/youtube";
 
@@ -91,7 +90,7 @@ export default function SearchVideoList ({ searchKeyword, isScrollEnd, isLoading
       </Wrapper>
       <LoadingWrapper>
         {
-          isLoading && <Loader color="#000000" size="16px" margin="4px" />
+          isLoading && <div>Loading...</div>
         }
       </LoadingWrapper>
     </>
